@@ -1,0 +1,68 @@
+@media (max-width: 992px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  nav a {
+    padding: 10px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .bikes .bike-list,
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bike-card,
+  .feature-box {
+    width: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 22px;
+  }
+
+  .hero {
+    padding: 70px 15px;
+  }
+
+  .bike-card img {
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .booking form {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 10px;
+  }
+
+  nav a {
+    font-size: 14px;
+  }
+
+  .hero h1 {
+    font-size: 20px;
+  }
+
+  footer p {
+    font-size: 12px;
+  }
+}
