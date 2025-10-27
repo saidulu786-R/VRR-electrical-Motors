@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Referral Network - VRR Electrical Motors</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .navbar .logo { display: flex; align-items: center; gap: 10px; }
+    .navbar .logo img { width: 45px; height: 45px; border-radius: 50%; }
+    .navbar .logo span { font-size: 1.3rem; font-weight: 600; color: #00e676; }
+
+    .nav-links { display: flex; align-items: center; gap: 30px; }
+    .nav-links a {
+      color: #fff; text-decoration: none; font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover { color: #00e676; }
+
+    /* Avatar + Referral Code */
+    .user-avatar { display: flex; flex-direction: column; align-items: center; }
+    .avatar-circle {
+      background: linear-gradient(135deg, #00e676, #00bfa5);
+      width: 45px; height: 45px; border-radius: 50%;
+      display: flex; justify-content: center; align-items: center;
+      font-size: 1.2rem; font-weight: bold; color: #fff;
+    }
+    .referral-tag {
+      margin-top: 5px; font-size: 0.8rem; color: #00e676;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 3px 10px; border-radius: 12px; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .copy-icon { font-size: 0.8rem; color: #00e676; }
+
+    /* Main Content */
+    .main-content {
+      display: flex; flex-direction: column; align-items: center;
+      padding-top: 130px; padding-bottom: 60px; flex: 1;
+    }
+
+    /* Profile Card */
+    .profile-card {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 40px; border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      width: 380px; margin-bottom: 60px;
+      text-align: center;
+    }
+    .profile-card h1 { color: #00e676; margin-bottom: 15px; }
+    .user-info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px; border-radius: 10px; text-align: left;
+    }
+    .user-info p { margin: 10px 0; }
+    .highlight { color: #00bfff; font-weight: 600; }
+
+    /* Flowchart */
+    .flowchart {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 25px; width: 100%;
+    }
+
+    .level { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; }
+
+    .node {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px;
+    }
+
+    .avatar {
+      width: 70px; height: 70px; border-radius: 50%;
+      background: linear-gradient(135deg, #00bfa5, #00e676);
+      display: flex; justify-content: center; align-items: center;
+      font-size: 1.5rem; font-weight: 600; color: white;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(0, 230, 118, 0.5);
+    }
+
+    .line { width: 2px; height: 40px; background: #00e676; margin: 0 auto; }
+
+    /* Referral Summary */
+    .referral-summary {
+      margin-top: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      width: 420px;
+    }
+
+    .reward {
+      color: gold;
+      font-size: 1.2rem;
+      margin-top: 10px;
+      font-weight: 600;
+      animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 5px gold; }
+      to { text-shadow: 0 0 15px #ffd700; }
+    }
+
+    footer { margin-top: auto; text-align: center; padding: 15px; color: #aaa; }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">
+      <img src="images/logo.png" alt="VRR Logo" />
+      <span>VRR Motors</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="binary.html" class="active">Referral Network</a>
+      <a href="login.html">Logout</a>
+      <div class="user-avatar">
+        <div class="avatar-circle" id="avatarInitial">U</div>
+        <div class="referral-tag" id="referralCodeTag">
+          <span id="referralCodeText">REF123</span>
+          <span class="copy-icon" onclick="copyReferralCode()">📋</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <section class="main-content">
+    <div class="profile-card">
+      <h1>Referral Network</h1>
+      <div class="user-info" id="userDetails"></div>
+    </div>
+
+    <div class="flowchart" id="referralTree"></div>
+
+    <div class="referral-summary" id="referralSummary"></div>
+  </section>
+
+  <footer>© 2025 VRR Electrical Motors. All Rights Reserved.</footer>
+
+  <script>
+    // Logged-in user (dummy example)
+    const user = JSON.parse(localStorage.getItem("loggedInUser")) || {
+      name: "John Doe",
+      email: "john@example.com",
+      referral_code: "REF123"
+    };
+
+    document.getElementById("userDetails").innerHTML = `
+      <p><span class="highlight">Name:</span> ${user.name}</p>
+      <p><span class="highlight">Email:</span> ${user.email}</p>
+      <p><span class="highlight">Referral Code:</span> ${user.referral_code}</p>
+    `;
+    document.getElementById("avatarInitial").textContent = user.name.charAt(0).toUpperCase();
+    document.getElementById("referralCodeText").textContent = user.referral_code;
+
+    function copyReferralCode() {
+      const code = document.getElementById("referralCodeText").textContent;
+      navigator.clipboard.writeText(code);
+      alert("Referral Code Copied: " + code);
+    }
+
+    // Referral structure with new levels
+    const referralData = {
+      level1: { name: user.name },
+      level2: [{ name: "Alice" }, { name: "Bob" }],
+      level3: [
+        { name: "Charlie" }, { name: "David" }, { name: "Eve" },
+        { name: "Frank" }, { name: "Grace" }
+      ],
+      level4: Array.from({ length: 10 }, (_, i) => ({ name: `User ${i + 1}` })),
+      level5: Array.from({ length: 35 }, (_, i) => ({ name: `Level5-${i + 1}` })),
+      level6: Array.from({ length: 50 }, (_, i) => ({ name: `Level6-${i + 1}` }))
+    };
+
+    function renderLevel(levelUsers, title) {
+      const container = document.createElement("div");
+      container.classList.add("level");
+      const titleEl = document.createElement("h3");
+      titleEl.textContent = title;
+      titleEl.style.color = "#00e676";
+      titleEl.style.marginBottom = "10px";
+      titleEl.style.width = "100%";
+      titleEl.style.textAlign = "center";
+      container.appendChild(titleEl);
+
+      const row = document.createElement("div");
+      row.classList.add("level");
+      levelUsers.forEach(u => {
+        const node = document.createElement("div");
+        node.classList.add("node");
+        node.innerHTML = `
+          <div class="avatar">${u.name.charAt(0).toUpperCase()}</div>
+          <span>${u.name}</span>
+        `;
+        row.appendChild(node);
+      });
+      container.appendChild(row);
+      return container;
+    }
+
+    function buildTree() {
+      const tree = document.getElementById("referralTree");
+      tree.innerHTML = "";
+
+      const mainNode = document.createElement("div");
+      mainNode.classList.add("node");
+      mainNode.innerHTML = `
+        <div class="avatar">${referralData.level1.name.charAt(0).toUpperCase()}</div>
+        <span>${referralData.level1.name} (You)</span>
+      `;
+      tree.appendChild(mainNode);
+      tree.appendChild(document.createElement("div")).classList.add("line");
+
+      // Render levels
+      tree.appendChild(renderLevel(referralData.level2, "Level 2 → 2 Users"));
+      tree.appendChild(document.createElement("div")).classList.add("line");
+
+      tree.appendChild(renderLevel(referralData.level3, "Level 3 → 5 Users"));
+      tree.appendChild(document.createElement("div")).classList.add("line");
+
+      tree.appendChild(renderLevel(referralData.level4, "Level 4 → 10 Users"));
+      tree.appendChild(document.createElement("div")).classList.add("line");
+
+      tree.appendChild(renderLevel(referralData.level5, "Level 5 → 15–50 Users (Thailand Trip)"));
+      tree.appendChild(document.createElement("div")).classList.add("line");
+
+      tree.appendChild(renderLevel(referralData.level6, "Level 6 → 50–100 Users (World Top View Trip)"));
+
+      // Count all referrals
+      const totalReferred =
+        referralData.level2.length +
+        referralData.level3.length +
+        referralData.level4.length +
+        referralData.level5.length +
+        referralData.level6.length;
+
+      const summaryDiv = document.getElementById("referralSummary");
+      let rewardMessage = "";
+
+      if (totalReferred >= 100) {
+        rewardMessage = "🌎 Congratulations! You've earned a World Trip to one of the top view places on Earth!";
+      } else if (totalReferred >= 50) {
+        rewardMessage = "🏝️ Awesome! You've earned a Thailand Trip!";
+      } else if (totalReferred >= 15) {
+        rewardMessage = "🏍️ You’ve won a bike worth ₹40,000!";
+      } else {
+        rewardMessage = `Refer <strong>${15 - totalReferred}</strong> more users to win a bike worth ₹40,000!`;
+      }
+
+      summaryDiv.innerHTML = `
+        <h3>Total Referred Users: ${totalReferred}</h3>
+        <p class="reward">${rewardMessage}</p>
+      `;
+    }
+
+    buildTree();
+  </script>
+</body>
+</html>
